@@ -16,6 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 const corsOptions = {
     origin: "*",
     credentials: true,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+
     optionSuccessStatus: 200,
   };
 // const corsOptions = {
