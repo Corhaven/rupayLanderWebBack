@@ -1,5 +1,4 @@
 
-const AWS = require('aws-sdk');
 const multerS3 = require('multer-s3');
 const multer = require("multer")
 const { S3Client } = require('@aws-sdk/client-s3');

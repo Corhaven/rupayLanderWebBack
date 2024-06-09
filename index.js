@@ -13,12 +13,16 @@ connect()
 ///// middleware
 app.use(express.json({ limit: '100mb' }))
 app.use(express.urlencoded({ extended: true }));
-
 const corsOptions = {
-    origin: 'http://localhost:3000',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: "*",
     credentials: true,
+    optionSuccessStatus: 200,
   };
+// const corsOptions = {
+//     origin: 'http://localhost:3000',
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//     credentials: true,
+//   };
   app.use(cors(corsOptions));
   app.use(cookieParser());
   app.use(morgan("dev"));
