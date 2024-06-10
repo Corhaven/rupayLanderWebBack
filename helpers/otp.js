@@ -16,7 +16,7 @@ const generateOTP = () => {
         console.log("otp send")
       } catch (error) {
         console.error('Error sending OTP:', error);
-        res.status(500).send('Error sending OTP');
+        // res.status(500).send('Error sending OTP');
       }
   };
   

@@ -33,14 +33,14 @@ const submitController = async(req,res)=>{
       document: userDocs
     }
   
-    const personalLoan =  await new personalLoanModel({
-      vendorId,
-      personalDetail: JSON.parse(personalDetail),
-      professionalDetail: JSON.parse(professionalDetail),
-      runningLoan: JSON.parse(runningLoan),
-      document: userDocs
+    // const personalLoan =  await new personalLoanModel({
+    //   vendorId,
+    //   personalDetail: JSON.parse(personalDetail),
+    //   professionalDetail: JSON.parse(professionalDetail),
+    //   runningLoan: JSON.parse(runningLoan),
+    //   document: userDocs
      
-    }).save()
+    // }).save()
     const loan = await new loanModel({
       vendorId,
       type : 'personal loan',
@@ -49,12 +49,26 @@ const submitController = async(req,res)=>{
  
     res.status(201).json({
         message: 'Personal loan details added successfully',
-        personalLoan
+        loan
       });  
  
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
-module.exports = submitController;
+
+const getAllpersonalLoan = async(req,res)=>{
+  const vendorId = req.vendor;
+  console.log("vendorId",vendorId)
+  const loans = await loanModel.find({_id :vendorId,type : 'personal loan balance transfer'})
+
+  
+  res.status(200).send({
+    success : true,
+    loans
+  })
+}
+
+
+module.exports = {getAllpersonalLoan,submitController};
 

@@ -11,6 +11,7 @@ const authMiddleware = async (req, res, next) => {
     if(user){
 
       req.vendor = user._id;
+      
     }
    }
     next();

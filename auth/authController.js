@@ -1,3 +1,5 @@
+const { hashPassword } = require("../helpers/hashpassword");
+const { generateOTP, sendOTP } = require("../helpers/otp");
 const venderModel = require("../models/venderModel");
 
 const verifyOTP = async (req, res) => {
@@ -29,16 +31,16 @@ const verifyOTP = async (req, res) => {
   const resetPassword = async (req, res) => {
     try {
   
-  
+  console.log("dfdsf")
       const { mobile, otp, newPassword ,conformpassword} = req.body;
-      if(newPassword ===  conformpassword){}
+      if(newPassword ===  conformpassword){
       const vendor = await venderModel.findOne({ 'basicInfo.mobile': mobile });
-  
+       console.log(vendor)
       if (!vendor) {
         res.status(400).send({success : false,message :'vendor not found' })
       }
   
-      if (vendor.otp !== otp || user.otpExpires < Date.now()) {
+      if (vendor.otp !== otp || vendor.otpExpires < Date.now()) {
         
           res.status(400).send({success : false, message : "Invalid or expired OTP"})
   
@@ -49,9 +51,14 @@ const verifyOTP = async (req, res) => {
       vendor.otp = undefined;
       vendor.otpExpires = undefined;
   
-      await user.save();
+      await vendor.save();
+      console.log("vendor",vendor)
       res.status(200).send({success : true, message : 'Password reset successfully'})
+    }else{
+      res.status(400).send({success : false, message : "password not match"})
   
+
+    }
     } catch (error) {
       res.status(400).send({success : false, message : error.message})
   
@@ -76,7 +83,7 @@ const verifyOTP = async (req, res) => {
       await vendor.save();
   
       sendOTP(mobile, otp);
-     
+         
         res.status(200).send({success: true,  message:'OTP sent successfully'});
     }catch (error) {
     

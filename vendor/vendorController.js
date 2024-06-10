@@ -58,7 +58,7 @@ const loginController = async (req,res) =>{
   try {
   const {email,password} = req.body;
   const vendor = await venderModel.findOne({"basicInfo.email" : email});
-  console.log("vendor",vendor)
+  // console.log("vendor",vendor)
   if(!vendor){
     return res.status(200).send({
       success:false,
@@ -92,8 +92,8 @@ res.json({ message: 'Logged in successfully' });
   const updateController = async(req,res)=>{
     try{
     const { basicInfo, companyDetail, bankDetail } = req.body;
-    console.log(bankDetail)
-    console.log(companyDetail)
+    // console.log(bankDetail)
+    // console.log(companyDetail)
     const updateData = {};
 
     if (basicInfo) {
@@ -158,15 +158,15 @@ res.json({ message: 'Logged in successfully' });
 //   })
   
 // }
-const getAllpersonalLoan = async(req,res)=>{
-  const vendorId = req.vendor;
-  console.log("vendorId",vendorId)
-  const loans = await loanModel.find({_id :vendorId,type : 'personal loan balance transfer'})
+// const getAllpersonalLoan = async(req,res)=>{
+//   const vendorId = req.vendor;
+//   console.log("vendorId",vendorId)
+//   const loans = await loanModel.find({_id :vendorId,type : 'personal loan balance transfer'})
 
   
-  res.status(200).send({
-    success : true,
-    loans
-  })
-}
-module.exports = {getAllpersonalLoan,signUp,loginController,updateController}
+//   res.status(200).send({
+//     success : true,
+//     loans
+//   })
+// }
+module.exports = {signUp,loginController,updateController}
