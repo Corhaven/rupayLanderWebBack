@@ -1,5 +1,5 @@
 const express = require("express");
-const submitController = require("./personalLoanBalanceTransferController");
+const {submitController,getAllpersonalloanBalancetransfer} = require("./personalLoanBalanceTransferController");
 const upload = require("../../helpers/multer");
 const authMiddleware = require("../../middlewares/authmiddleware");
 const personalLoanBalanceTransferRouter = express.Router();
@@ -21,5 +21,6 @@ const imgObject = upload.fields([
 
 personalLoanBalanceTransferRouter.post("/submit",imgObject,authMiddleware,submitController)
 
+personalLoanBalanceTransferRouter.get("/get-all-personal-loan-balance-transfer",authMiddleware,getAllpersonalloanBalancetransfer)
 
 module.exports = personalLoanBalanceTransferRouter;

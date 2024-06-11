@@ -14,7 +14,9 @@ const submitController = async(req,res)=>{
       });
     }
     const files = req.files;
-     const vendorId = req.vendor
+    const vendorId = req.vendor._id
+    const vendorInfo = req.vendor.basicInfo
+    
     const userDocs = { 
       panCard : files.panCard[0].location || " " ,
       aadharfront : files.aadharfront[0].location || " " ,
@@ -33,16 +35,9 @@ const submitController = async(req,res)=>{
       document: userDocs
     }
   
-    // const personalLoan =  await new personalLoanModel({
-    //   vendorId,
-    //   personalDetail: JSON.parse(personalDetail),
-    //   professionalDetail: JSON.parse(professionalDetail),
-    //   runningLoan: JSON.parse(runningLoan),
-    //   document: userDocs
-     
-    // }).save()
     const loan = await new loanModel({
       vendorId,
+     vendorInfo,
       type : 'personal loan',
       details
     }).save();
@@ -58,15 +53,17 @@ const submitController = async(req,res)=>{
 }
 
 const getAllpersonalLoan = async(req,res)=>{
-  const vendorId = req.vendor;
-  console.log("vendorId",vendorId)
-  const loans = await loanModel.find({_id :vendorId,type : 'personal loan balance transfer'})
-
-  
+  try{
+  const vendorId = req.vendor._id;
+  const loans = await loanModel.find({type : 'personal loan'})
   res.status(200).send({
     success : true,
     loans
   })
+} catch (error) {
+  console.log(error.message)
+  res.status(500).send({success : false,message : error.message})
+}
 }
 
 

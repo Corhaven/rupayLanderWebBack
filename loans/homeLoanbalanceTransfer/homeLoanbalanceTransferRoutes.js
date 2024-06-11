@@ -2,12 +2,9 @@
 
 const express = require("express")
 const {validator} = require("../../middlewares/validators");
-const submitController = require("./homeLoanbalanceTransferController");
+const {submitController, getAllHomeLoantransferController} = require("./homeLoanbalanceTransferController");
 const upload = require("../../helpers/multer");
 const authMiddleware = require("../../middlewares/authmiddleware");
-
-
-
 
 const homeLoanbalanceTransferRouter = express.Router();
 const imgObject = upload.fields([
@@ -27,5 +24,6 @@ const imgObject = upload.fields([
 
 
 homeLoanbalanceTransferRouter.post("/submit",imgObject,authMiddleware,submitController)
+homeLoanbalanceTransferRouter.get("/getall-home-loan-balance-transfer",authMiddleware,getAllHomeLoantransferController)
 
 module.exports  = homeLoanbalanceTransferRouter

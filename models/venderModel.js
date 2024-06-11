@@ -1,6 +1,7 @@
 
 const  mongoose  = require("mongoose");
 const { currentMonthAndYearInString } = require("../helpers/hashpassword");
+const { boolean } = require("joi");
 
 
 // const MobileNumberValidator = {
@@ -84,7 +85,14 @@ const vendorSchema = new mongoose.Schema(
     
     experience :{
     type : Boolean
-  }},
+  },
+  //  referral :{
+  //   type : String
+  //  },
+  //  termsAndCondition :{
+  //    type : boolean
+  //  }
+},
 
   memberSince:
    { type: String, default: currentMonthAndYearInString() },

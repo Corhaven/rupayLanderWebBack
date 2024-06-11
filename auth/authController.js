@@ -91,4 +91,17 @@ const verifyOTP = async (req, res) => {
     }
   };
 
-  module.exports = {verifyOTP,resetPassword,forgotPasswordController}
+  const logoutController = async (req,res)=>{
+    try {
+      res.clearCookie('accesstoken');
+      res.status(200).send({ message: 'Logged out successfully' });
+    } catch (error) {
+      console.log(error.message)
+      res.status(404).send({ message: error.message });
+
+    }
+  
+}
+
+  
+  module.exports = {verifyOTP,resetPassword,forgotPasswordController,logoutController}

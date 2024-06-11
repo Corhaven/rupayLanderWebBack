@@ -10,7 +10,9 @@ if (!propertyDetail || !professionalDetail || !runningLoan) {
     error: 'propertyDetail, professionalDetail, and runningLoan are required'
   });
 }
-const vendorId = req.vendor;
+const vendorId = req.vendor._id;
+const vendorInfo = req.vendor.basicInfo
+
 const files = req.files;
     const userDocs = { 
       panCard : files.panCard[0].location || " " ,
@@ -34,18 +36,18 @@ const files = req.files;
     
 const loan = await new loanModel({
   vendorId,
+  vendorInfo,
   type : 'loan against property',
   details
 }).save();
-const loanAgainstProperty  = await new loanAgainstPropertyModel({propertyDetail: JSON.parse(propertyDetail)
-  ,professionalDetail: JSON.parse(professionalDetail),
-  runningLoan: JSON.parse(runningLoan),
-  document: userDocs
+// const loanAgainstProperty  = await new loanAgainstPropertyModel({propertyDetail: JSON.parse(propertyDetail)
+//   ,professionalDetail: JSON.parse(professionalDetail),
+//   runningLoan: JSON.parse(runningLoan),
+//   document: userDocs
 
-}).save()
+// }).save()
 res.status(201).json({
     message: 'loan Against Property details added successfully',
-    loanAgainstProperty,
     loan
   });
 } catch (error) {
@@ -53,4 +55,17 @@ res.status(201).json({
 }
 }
 
-module.exports = submitController
+
+const getAllLoanAgainstProperty = async(req,res)=>{
+  try{
+  const loans = await loanModel.find({type : 'loan against property'})
+  res.status(200).send({
+    success : true,
+    loans
+  })
+} catch (error) {
+  console.log(error.message)
+  res.status(500).send({success : false,message : error.message})
+}
+}
+module.exports = {submitController,getAllLoanAgainstProperty}

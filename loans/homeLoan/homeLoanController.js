@@ -12,7 +12,8 @@ if (!propertyDetail || !professionalDetail || !runningLoan) {
   });
 }
 const files = req.files;
-const vendorId = req.vendor
+const vendorId = req.vendor._id
+const vendorInfo = req.vendor.basicInfo
 
     const userDocs = { 
       panCard : files.panCard[0].location || " " ,
@@ -38,26 +39,38 @@ const vendorId = req.vendor
 
 const loan = await new loanModel({
   vendorId,
+  vendorInfo,
   type : 'home loan',
   details
 }).save();
-const homeLoan = await new homeLoanModel({
-  vendorId,
-  propertyDetail: JSON.parse(propertyDetail)
-  ,professionalDetail: JSON.parse(professionalDetail),
-  runningLoan: JSON.parse(runningLoan),
-  document: userDocs
-
-}).save()
-
 
 res.status(201).json({
     message: 'Home loan details added successfully',
-    homeLoan
+    loan,
+
   });
 } catch (error) {
   res.status(500).json({ error: error.message });
 }
 }
 
-module.exports = submitController
+
+const getAllhomeLoanController = async(req,res)=>{
+  try {
+    const vendorId = req.vendor._id;
+    console.log(vendorId)
+    const loans = await loanModel.find({
+      type :
+      "home loan"
+      })
+    console.log(loans)
+    res.status(200).send({
+      success : true,
+      loans
+    })
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send({success : false,message : error.message})
+  }
+}
+module.exports = {submitController,getAllhomeLoanController}

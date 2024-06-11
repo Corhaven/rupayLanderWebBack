@@ -10,7 +10,7 @@ venderRouter.post("/login",validator(loginSchema),loginController)
 
 
 venderRouter.post("/update-profile",authMiddleware,updateController) 
-// venderRouter.get("/get-vendor-loans",authMiddleware,getvendorLoan) 
+venderRouter.get("/get-vendor-loans",authMiddleware,getvendorLoan) 
 // venderRouter.get("/get-all-personal-loans",authMiddleware,getAllpersonalLoan) 
 
 

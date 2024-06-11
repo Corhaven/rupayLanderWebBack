@@ -1,6 +1,6 @@
 const express = require("express")
 const {validator} = require("../../middlewares/validators");
-const submitController = require("./loanAgainstPropertyController");
+const {submitController,getAllLoanAgainstProperty} = require("./loanAgainstPropertyController");
 const upload = require("../../helpers/multer");
 const authMiddleware = require("../../middlewares/authmiddleware");
 
@@ -22,5 +22,7 @@ const imgObject = upload.fields([
 
   ])
 loanAgainstPropertyRouter.post("/submit",imgObject,authMiddleware,submitController)
+
+loanAgainstPropertyRouter.get("/getall-loan-against-property",authMiddleware,getAllLoanAgainstProperty)
 
 module.exports  = loanAgainstPropertyRouter

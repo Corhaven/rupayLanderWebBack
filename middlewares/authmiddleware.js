@@ -7,15 +7,15 @@ const authMiddleware = async (req, res, next) => {
   let token = req.cookies.accesstoken
   ;
   if (token) {
-    const user =  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    if(user){
-
-      req.vendor = user._id;
-      
+    const decoded =  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    console.log("decoded",decoded._id)
+    if(decoded){
+      req.vendor = decoded; 
     }
    }
     next();
   } catch (err) {
+    console.log(err.message)
     res.status(400).json({ message: 'Unauthorized: Invalid token' });
   }
 };

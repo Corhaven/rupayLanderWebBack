@@ -50,15 +50,13 @@ const signUp = async (req, res) => {
    
     });
   }}
-  
-
 
    
 const loginController = async (req,res) =>{
   try {
   const {email,password} = req.body;
   const vendor = await venderModel.findOne({"basicInfo.email" : email});
-  // console.log("vendor",vendor)
+  console.log("vendor",vendor)
   if(!vendor){
     return res.status(200).send({
       success:false,
@@ -72,9 +70,9 @@ const loginController = async (req,res) =>{
         message: "Invalid Password",
       });
     }
-
-const accessToken = jwt.sign({_id : vendor._id,username : vendor}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3h' });
-const refreshToken = jwt.sign({_id : vendor._id}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '3d' });
+ const payload  = {_id : vendor._id,basicInfo : vendor.basicInfo}
+const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3h' });
+const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '3d' });
 res.cookie("accessToken", accessToken, {
   httpOnly: true,
   secure: true,
@@ -126,7 +124,7 @@ res.json({ message: 'Logged in successfully' });
       }
       updateData.bankDetail = filteredBankDetails;
     }
-    const updatedUser = await venderModel.findByIdAndUpdate(req.vendor, { $set: updateData }, { new: true });
+    const updatedUser = await venderModel.findByIdAndUpdate(req.vendor._id, { $set: updateData }, { new: true });
 
     if (!updatedUser) {
       res.status(500).send({message :"User not found"}) ;
@@ -146,20 +144,20 @@ res.json({ message: 'Logged in successfully' });
 
 
 
-// const getvendorLoan = async(req,res)=>{
-//   const vendorId = req.vendor
+const getvendorLoan = async(req,res)=>{
+  const vendorId = req.vendor._id
 
-//   const loans = await loanModel.find({vendorId},{'details.document' : 0,"details.runningLoan" :0})
+  const loans = await loanModel.find({vendorId},{'details.document' : 0,"details.runningLoan" :0})
 
 
-//   res.status(200).send({
-//     success : true,
-//     loans
-//   })
+  res.status(200).send({
+    success : true,
+    loans
+  })
   
-// }
+}
 // const getAllpersonalLoan = async(req,res)=>{
-//   const vendorId = req.vendor;
+//   const vendorId = req.vendor._id;
 //   console.log("vendorId",vendorId)
 //   const loans = await loanModel.find({_id :vendorId,type : 'personal loan balance transfer'})
 
@@ -169,4 +167,4 @@ res.json({ message: 'Logged in successfully' });
 //     loans
 //   })
 // }
-module.exports = {signUp,loginController,updateController}
+module.exports = {signUp,loginController,updateController,getvendorLoan}

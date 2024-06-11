@@ -11,7 +11,9 @@ if (!propertyDetail || !professionalDetail || !propertyDetail || !runningLoan) {
     error: 'propertyDetail, professionalDetail,propertyDetail , and runningLoan are required'
   });
 }
-const vendorId = req.vendor;
+const vendorId = req.vendor._id;
+const vendorInfo = req.vendor.basicInfo
+
 const files = req.files;
     const userDocs = { 
       panCard : files.panCard[0].location || " " ,
@@ -40,23 +42,37 @@ const files = req.files;
 
 const loan = await new loanModel({
   vendorId,
+  vendorInfo,
   type : 'home loan balance transfer',
   details
 }).save();
 
-const homeLoanbalanceTransfer = await new homeLoanbalanceTransferModel({
-  personalDetail :JSON.parse(personalDetail),
-  propertyDetail: JSON.parse(propertyDetail)
-  ,professionalDetail: JSON.parse(professionalDetail),
-  runningLoan: JSON.parse(runningLoan),
-  document: userDocs}).save()
+// const homeLoanbalanceTransfer = await new homeLoanbalanceTransferModel({
+//   personalDetail :JSON.parse(personalDetail),
+//   propertyDetail: JSON.parse(propertyDetail)
+//   ,professionalDetail: JSON.parse(professionalDetail),
+//   runningLoan: JSON.parse(runningLoan),
+//   document: userDocs}).save()
 res.status(201).json({
     message: 'Home loan balance transfer details added successfully',
-    homeLoanbalanceTransfer
+    loan
   });
 } catch (error) {
   res.status(500).json({ error: error.message });
 }
 }
 
-module.exports = submitController
+const getAllHomeLoantransferController = async(req,res)=>{
+  try{
+    const loans = await loanModel.find({type : 'home loan balance transfer'})
+    res.status(200).send({
+      success : true,
+      loans
+    })
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send({success : false,message : error.message})
+  }
+}
+
+module.exports = {submitController,getAllHomeLoantransferController}

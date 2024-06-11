@@ -1,6 +1,6 @@
 const express = require("express");
 const {validator} = require("../../middlewares/validators");
-const submitController = require("./businessLoanController");
+const {submitController,businessLoanController} = require("./businessLoanController");
 const upload = require("../../helpers/multer");
 const authMiddleware = require("../../middlewares/authmiddleware");
 const businessLoanRouter = express.Router();
@@ -19,5 +19,6 @@ const imgObject = upload.fields([
 
 businessLoanRouter.post("/submit",imgObject,authMiddleware, submitController)
 
+businessLoanRouter.get("/getall-business-loans",authMiddleware, businessLoanController)
 
 module.exports = businessLoanRouter;

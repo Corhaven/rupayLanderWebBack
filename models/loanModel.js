@@ -2,29 +2,50 @@
 const mongoose = require("mongoose");
 const { personalDetailSchema, professionalDetailSchema, runningloanSchema, propertyDetailSchema, businessprofessionalDetailSchema } = require("../common/commonSchema");
 const document = require("./documentModel");
+const { currentMonthAndYearInString } = require("../helpers/hashpassword");
 const { Schema } = mongoose;
-// const { required } = require("joi");
-const currentMonthAndYearInString = () => {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const today = new Date();
-  const formattedDate = `${today.getDate()} ${ 
-    monthNames[today.getMonth()]
-  } ${today.getFullYear()}`;
-  return formattedDate;
-};
+ 
+const  basicInfoSchema ={
+  username: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: true    },
+ 
+  // mobile: MobileNumberValidator,
+  mobile: {
+    type: Number,
+    required: true},
+
+    qualification :{
+      type : String,
+      required : true
+    },
+ 
+company :{
+  type : String,
+
+},
+  state: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  
+  experience :{
+  type : Boolean
+}}
+
 const UserDocsData = {
   panCard: {
     type: String,
@@ -114,6 +135,9 @@ const detailsScehma = new Schema({  personalDetail :{
 const loanSchema = new Schema(
   {   
     vendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'vendor', required: true },
+    vendorInfo :{
+      type : basicInfoSchema
+    },
     type :  {
         type: String,
         enum: ['personal loan', 'home loan', 'loan against property','business loan',
@@ -125,10 +149,17 @@ const loanSchema = new Schema(
        required : true
          
         },   
-      status: { type: String, enum: ['on-Hold', 'processed', 'pending', 'cancelled'], default: 'pending' },
-     paymentStatus: { type: String, enum: ['received', 'not received'], default: 'not received' },
+      status: 
+      { type: String,
+         enum: ['on-Hold', 'processed', 'pending', 'cancelled'],
+         default: 'pending' },
+     paymentStatus:
+      { type: String, 
+      enum: ['received', 'not received'],
+       default: 'not received' },
      createdLoan:
-     { type: String, default: currentMonthAndYearInString() },
+     { type: String,
+       default: currentMonthAndYearInString() },
     //  createdAt: { type: Date, default: Date.now },
      updatedAt: { type: Date, default: Date.now },
             
