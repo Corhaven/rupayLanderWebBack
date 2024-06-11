@@ -1,17 +1,19 @@
 // personalLoanBalanceTransfer
 const loanModel = require("../../models/loanModel");
-const personalLoanBalanceTransferModel = require("../../models/personalLoanBalanceTransferModel")
+// const personalLoanBalanceTransferModel = require("../../models/personalLoanBalanceTransferModel")
 
 const submitController = async(req,res)=>{
   try {
     const { personalDetail, professionalDetail, runningLoan} = req.body;
-    const vendorId = req.vendor;
+    const vendorId = req.vendor._id;
     if (!personalDetail || !professionalDetail || !runningLoan) {
       return res.status(400).json({
         error: 'personalDetail, professionalDetail, and runningLoan are required'
       });
     }
     const files = req.files;
+    const vendorInfo = req.vendor.basicInfo
+
         const userDocs = { 
           panCard : files.panCard[0].location || " " ,
           aadharfront : files.aadharfront[0].location || " " ,
@@ -35,27 +37,41 @@ const submitController = async(req,res)=>{
           document: userDocs
         }
 
-    const personalLoanBalanceTransfer = await new personalLoanBalanceTransferModel({
-      personalDetail: JSON.parse(personalDetail),
-      professionalDetail: JSON.parse(professionalDetail),
-      runningLoan: JSON.parse(runningLoan),
-      document: userDocs
-
-    }).save()
     const loan = await new loanModel({
       vendorId,
+      vendorInfo ,
       type : 'personal loan balance transfer',
       details
     }).save();
   
     res.status(201).json({
       message: ' personal Loan Balance Transfer details added successfully',
-      personalLoanBalanceTransfer
+      loan
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 
 }
-module.exports = submitController;
+
+const getAllpersonalloanBalancetransfer = async(req,res)=>{
+  try {
+    const vendorId = req.vendor._id;
+    console.log(vendorId)
+    const loans = await loanModel.find({
+      type :
+      "personal loan balance transfer"
+      })
+    console.log(loans)
+    res.status(200).send({
+      success : true,
+      loans
+    })
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send({success : false,message : error.message})
+  }
+ 
+}
+module.exports = {submitController,getAllpersonalloanBalancetransfer};
 

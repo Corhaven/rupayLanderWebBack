@@ -13,7 +13,9 @@ if (!personalDetail || !professionalDetail || !runningLoan) {
     error: ' professionalDetail,propertyDetail , and runningLoan are required'
   });
 }
-const  vendorId = req.vendor
+const  vendorId = req.vendor._id
+const vendorInfo = req.vendor.basicInfo
+
 const files = req.files;
        console.log("req.files",req.files)
     const userDocs = { 
@@ -37,20 +39,20 @@ const files = req.files;
       runningLoan: JSON.parse(runningLoan),
       document: userDocs
     }
-    const businessloan = await new businessloanModel({
-      personalDetail :JSON.parse(personalDetail),
-      professionalDetail : JSON.parse(professionalDetail),
-      runningLoan :JSON.parse(runningLoan),
-      document: userDocs
-    }).save()
+    // const businessloan = await new businessloanModel({
+    //   personalDetail :JSON.parse(personalDetail),
+    //   professionalDetail : JSON.parse(professionalDetail),
+    //   runningLoan :JSON.parse(runningLoan),
+    //   document: userDocs
+    // }).save()
     const loan = await new loanModel({
       vendorId,
+      vendorInfo,
       type : 'business loan',
       details
     }).save();
     res.status(201).json({
       message: 'business loan details added successfully',
-      businessloan,
       loan
     });
   } catch (error) {
@@ -58,4 +60,23 @@ const files = req.files;
   }
 
 }
-module.exports = submitController;
+
+const businessLoanController = async(req,res)=>{
+  try {
+    const vendorId = req.vendor._id;
+    console.log(vendorId)
+    const loans = await loanModel.find({
+      type :
+      "business loan"
+      })
+    console.log(loans)
+    res.status(200).send({
+      success : true,
+      loans
+    })
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send({success : false,message : error.message})
+  }
+}
+module.exports = {submitController,businessLoanController};

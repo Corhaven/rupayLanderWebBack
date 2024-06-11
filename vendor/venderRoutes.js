@@ -1,6 +1,6 @@
 const express = require("express")
 const {signUp,loginController, forgotPasswordController, updateController, verifyOTP,
- resetPassword, getvendorLoan, getAllpersonalLoan} = require("./vendorController");
+ resetPassword, getvendorLoan} = require("./vendorController");
 const {validator} = require("../middlewares/validators");
 const {basicInfoSchema, signupSchema, loginSchema} = require("./vendorSchema");
 const authMiddleware = require("../middlewares/authmiddleware");
@@ -10,8 +10,8 @@ venderRouter.post("/login",validator(loginSchema),loginController)
 
 
 venderRouter.post("/update-profile",authMiddleware,updateController) 
-// venderRouter.get("/get-vendor-loans",authMiddleware,getvendorLoan) 
-venderRouter.get("/get-all-personal-loans",authMiddleware,getAllpersonalLoan) 
+venderRouter.get("/get-vendor-loans",authMiddleware,getvendorLoan) 
+// venderRouter.get("/get-all-personal-loans",authMiddleware,getAllpersonalLoan) 
 
 
 venderRouter.post('/token', async (req, res) => {

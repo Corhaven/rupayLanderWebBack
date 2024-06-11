@@ -1,6 +1,6 @@
 const express = require("express")
 const {validator} = require("../../middlewares/validators");
-const submitController = require("./homeLoanController");
+const {submitController, getAllhomeLoanController} = require("./homeLoanController");
 const upload = require("../../helpers/multer");
 const authMiddleware = require("../../middlewares/authmiddleware");
 
@@ -22,5 +22,6 @@ const imgObject = upload.fields([
 
 
 homeLoanRouter.post("/submit",imgObject,authMiddleware,submitController)
+homeLoanRouter.get("/getall-home-loans",authMiddleware, getAllhomeLoanController)
 
 module.exports  = homeLoanRouter

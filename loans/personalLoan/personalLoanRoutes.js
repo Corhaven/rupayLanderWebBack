@@ -1,6 +1,6 @@
 const express = require("express");
 const {validator} = require("../../middlewares/validators");
-const submitController = require("./personalLoanController");
+const {submitController,getAllpersonalLoan} = require("./personalLoanController");
 const upload = require("../../helpers/multer");
 const authMiddleware = require("../../middlewares/authmiddleware");
 const personalLoanRouter = express.Router();
@@ -15,6 +15,7 @@ const cpLoad = upload.fields([
   ])
 
 personalLoanRouter.post("/submit",authMiddleware,cpLoad,submitController)
+personalLoanRouter.get("/get-all-personal-loans",authMiddleware,getAllpersonalLoan)
 
 
 module.exports = personalLoanRouter;
